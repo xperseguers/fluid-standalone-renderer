@@ -1,0 +1,15 @@
+{
+  "name": "causal/fluid-standalone-renderer",
+  "description": "A rendering engine for Fluid standalone",
+  "license": ["LGPL-3.0"],
+  "require": {
+    "php": ">=7.0.0",
+    "typo3fluid/fluid": "^2.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "TYPO3Fluid\\Fluid\\": "src/fluid/",
+      "Causal\\FluidStandaloneRenderer\\": "src/"
+    }
+  }
+}

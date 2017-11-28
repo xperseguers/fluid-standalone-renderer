@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+
+<head>
+    <title>Fluid Template Viewer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-bright.min.css"/>
+    <style>
+        html, body, pre {
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        pre {
+            margin-bottom: 2em;
+            font-family: Monaco, 'Lucida Console', monospace;
+            font-size: 14px;
+        }
+        h1, h2 {
+            margin: 0;
+            padding: .5em 20px;
+            color: #000;
+            text-shadow: 1px 1px 1px rgba(0,0,0,.3);
+            font-size: 20px;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .content {
+            margin-bottom: 2em;
+            padding: 20px;
+        }
+        .smaller {
+            font-size: 70%;
+        }
+        .hljs {
+            padding: .5em 20px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/htmlbars.min.js"></script>
+</head>
+<body>
+
+    <f:render section="content"/>
+
+</body>
+</html>
