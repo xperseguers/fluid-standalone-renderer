@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+
+<head>
+    <title>{file}</title>
+
+    <f:for each="{css}" as="file">
+        <link rel="stylesheet" href="{file}"/>
+    </f:for>
+    <f:for each="{js}" as="file">
+        <script type="text/javascript" src="{file}"></script>
+    </f:for>
+</head>
+<body>
+
+{html -> f:format.raw()}
+
+<f:for each="{jsFooter}" as="file">
+    <script type="text/javascript" src="{file}"></script>
+</f:for>
+
+</body>
+</html>

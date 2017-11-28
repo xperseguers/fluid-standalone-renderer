@@ -9,7 +9,7 @@
     <h1>{file} <span class="smaller">(<a href="{script}">back</a>)</span></h1>
 
     <h2>Sample Output</h2>
-    <div class="content">{sampleHtml -> f:format.raw()}</div>
+    <iframe src="{script}?file={file}&amp;standalone=1" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
 
     <h2>Data</h2>
     <pre><code>{data}</code></pre>
@@ -23,6 +23,9 @@
                 hljs.highlightBlock(block);
             });
         });
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        }
     </script>
 </f:section>
 

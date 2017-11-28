@@ -42,6 +42,21 @@ class Server
     protected $projectView;
 
     /**
+     * @var array
+     */
+    protected $projectStylesheets = [];
+
+    /**
+     * @var array
+     */
+    protected $projectJavaScripts = [];
+
+    /**
+     * @var array
+     */
+    protected $projectJavaScriptsFooter = [];
+
+    /**
      * Server constructor.
      *
      * @param string $scriptName
@@ -69,6 +84,31 @@ class Server
     }
 
     /**
+     * @param string $relativeFileName
+     * @return $this
+     */
+    public function addProjectStylesheet(string $relativeFileName)
+    {
+        $this->projectStylesheets[] = $relativeFileName;
+        return $this;
+    }
+
+    /**
+     * @param string $relativeFileName
+     * @param bool $allowMoveToFooter
+     * @return $this
+     */
+    public function addProjectJavaScript(string $relativeFileName, bool $allowMoveToFooter = false)
+    {
+        if ($allowMoveToFooter) {
+            $this->projectJavaScriptsFooter[] = $relativeFileName;
+        } else {
+            $this->projectJavaScripts[] = $relativeFileName;
+        }
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function run() : string
@@ -76,7 +116,11 @@ class Server
         if (!isset($_GET['file'])) {
             $out = $this->showAvailableTemplates();
         } else {
-            $out = $this->renderTemplate($_GET['file']);
+            if ($_GET['standalone'] ?? false) {
+                $out = $this->renderTemplate($_GET['file']);
+            } else {
+                $out = $this->showTemplate($_GET['file']);
+            }
         }
 
         return $out;
@@ -119,26 +163,49 @@ class Server
         return $out;
     }
 
-    protected function renderTemplate(string $fileName) : string
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    protected function showTemplate(string $fileName) : string
     {
         $jsonFileName = $this->dataPath . $fileName . '.json';
-
         $data = is_file($jsonFileName) ? json_decode(file_get_contents($jsonFileName), true) : [];
-
-        if (substr($fileName, 0, 9) === 'Partials/') {
-            $sampleHtml = $this->projectView->renderPartial(substr($fileName, 9), null, $data);
-        } else {
-            $sampleHtml = $this->projectView->render(substr($fileName, 10), null, $data);
-        }
 
         $this->view->assignMultiple([
             'file' => $fileName,
-            'sampleHtml' => $sampleHtml,
             'data' => json_encode($data, JSON_PRETTY_PRINT),
             'template' => file_get_contents($this->htmlPath . $fileName . '.html'),
         ]);
 
         $out = $this->view->render('Show');
+        return $out;
+    }
+
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    protected function renderTemplate(string $fileName) : string
+    {
+        $jsonFileName = $this->dataPath . $fileName . '.json';
+        $data = is_file($jsonFileName) ? json_decode(file_get_contents($jsonFileName), true) : [];
+
+        if (substr($fileName, 0, 9) === 'Partials/') {
+            $html = $this->projectView->renderPartial(substr($fileName, 9), null, $data);
+        } else {
+            $html = $this->projectView->render(substr($fileName, 10), null, $data);
+        }
+
+        $this->view->assignMultiple([
+            'css' => $this->projectStylesheets,
+            'js' => $this->projectJavaScripts,
+            'jsFooter' => $this->projectJavaScriptsFooter,
+            'file' => $fileName,
+            'html' => $html,
+        ]);
+        $out = $this->view->render('Render');
+
         return $out;
     }
 
